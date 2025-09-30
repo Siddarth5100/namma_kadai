@@ -1,0 +1,32 @@
+
+
+<center><header><h2>Company Name : {{name}}</h2></header></center>
+<hr>
+
+<div>
+<p align="left"><h3>Cash Balance available: RS. {{balance}}</h3></p>
+</div>
+
+<h4>Items Available:</h4>
+
+
+<table border="1" width="50%" align="left">
+   
+    <tr>
+        <th>Item_id</th>
+        <th>Item_name</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<button> Add item </button>
+<button> Purchase item </button>
+<button> Sales item </button>
+
+
