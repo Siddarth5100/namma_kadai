@@ -1,7 +1,8 @@
 from flask import Flask
 from db import db
 from models import create_tables, Company
-from views import api, get_company
+from views import api
+from flask_migrate import Migrate
 
 app = Flask(__name__) # creating copy of Flask
 
@@ -9,6 +10,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Sid5100#!1@
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app) # binds db(obj) to flask app
+migrate = Migrate(app,db)
+
 
 def create_company():
     company_name = "Namma kadai"
@@ -26,41 +29,3 @@ if __name__ == "__main__":
         create_tables()
 
     app.run(debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -8,67 +8,70 @@ now = datetime.now()
 api = Blueprint('api', __name__)
 
 
+
 @api.route('/home', methods=['GET'])
-def get_company():
-    row = Company.query.filter_by(company_name='namma kadai').first()
-    return render_template('index.html', name=row.company_name, balance=row.cash_balance)
+def home_page():
+    row = Company.query.filter_by(company_name='Namma kadai').first()
+    items = Item.query.all()
+    result = []
+
+    for item in items:
+        item_dict = {}
+        item_dict["id"] = item.item_id
+        item_dict["name"] = item.item_name
+        result.append(item_dict)
+    
+    return render_template('index.html', name=row.company_name, balance=row.cash_balance, items=result)
 
 
-def add_items(id, name):
-    item = Item(item_id=id, item_name=name)
+@api.route('/api/add_items', methods=['POST'])    
+def add_items():
+    data = request.get_json()
+    item = data.get("item_name")
     #print(item)
 
-    db.session.add(item)
+    #if not item:
+    new_item = Item(item_name=item)
+
+    db.session.add(new_item)
     db.session.commit()
 
-    return {"message":"Item added successfully"}
+    return jsonify({"message":"Item added successfully",
+                    "item_id": new_item.item_id
+    })
 
 
-@api.route('/items', methods=['GET'])
-def get_items():
-    items = Item.query.all()
-    for item in items:
-        print("item row", dir(item))
-        print("Query",item.query) 
+@api.route('/api/delete_items/<int:item_id>',methods=['DELETE'])
+def delete_items(item_id):
+    item = Item.query.get(item_id)
+    if not item:
+        return jsonify({"message": "Item not found"}), 404
     
-    print("----------------------------------",dir(items))
-    result = [{"id": i.item_id, "name": i.item_name} for i in items]
-    
-    #return jsonify(result)
-    return render_template('index.html', items=result)
-
-
-@api.route('/items', methods=['POST'])
-def create_items():
-    data = request.json
-    new_id = data['id']
-    new_name = data['name']
-    item = Item(item_id=new_id, item_name=new_name)    
-    db.session.add(item)
-    db.session.commit()
-    return jsonify({"message" : "item added successfully"})
-
-
-
-def purchase_items(time, item_id, qty, rate, amount):
-    purchase = Purchase(timestamp = time, item_id = item_id, qty = qty, rate = rate, amount = amount)
-
-    db.session.add(purchase)
+    db.session.delete(item)
     db.session.commit()
 
-# re-factor 
-@api.route('/purchase', methods=['POST'])
+    return jsonify({"message":"deleted succussfuly", "item_id":item_id})
+
+
+@api.route('/purchase', methods=['GET'])
+def get_purchase_page():
+    purchases = Purchase.query.all() #fetch all purchase records
+    return render_template('purchase.html', purchases=purchases)
+
+
+@api.route('/api/add_new_purchase', methods=['POST'])
 def post_purchase_items():
-    data = request.json
+    data = request.get_json()
     time = datetime.now()
     item_id = data["item_id"]
-    qty = data["qty"]
-    rate = data["rate"]
+    qty = int(data["qty"])
+    rate = int(data["rate"])
     amount = qty * rate
 
     company = Company.query.first()
 
     if company.cash_balance < amount:
+        #return render_template("purchase.html", message="Insufficient balance")
         return jsonify({
             "message" : "Insufficient balance to make this purchase"
         }), 400
@@ -76,12 +79,12 @@ def post_purchase_items():
     
     new_purchase = Purchase(timestamp = time, item_id = item_id, qty = qty, rate = rate, amount = amount)
     db.session.add(new_purchase)
-
     
     company.cash_balance = company.cash_balance - amount
     
     db.session.commit()
 
+    #return render_template("purchase.html", message=f"Purchase successful, Amount: {amount}")
     return jsonify({
         "message" : "purchase added successfully",
         "amount": amount,
@@ -89,13 +92,15 @@ def post_purchase_items():
     })
 
 
+@api.route('/sales', methods=['GET'])
+def get_sales_page():
+    sales = Sales.query.all()
+    return render_template('sales.html', sales=sales)
 
-def sales_items(time, item_id, qty, rate, amount):
-    sales = Sales(timestamp=time, item_id=item_id, qty=qty, rate=rate, amount=amount)
 
-@api.route('/sales', methods=['POST'])
+@api.route('/api/add_new_sales', methods=['POST'])
 def post_sales_items():
-    data = request.json
+    data = request.get_json()
     time = datetime.now()
     item_id = data["item_id"]
     qty = data["qty"]
@@ -117,29 +122,69 @@ def post_sales_items():
     })
 
 
-@api.route('/dashboard')
-def dashboard():
-    company = Company.query.first()
 
-    items = Item.query.all()
-    result = [{"id":i.item_id, "name": i.item_name} for i in items]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########*********************want to check
+
+'''
+def purchase_items(time, item_id, qty, rate, amount):
+    purchase = Purchase(timestamp = time, item_id = item_id, qty = qty, rate = rate, amount = amount)
+
+    db.session.add(purchase)
+    db.session.commit()
+
+ def sales_items(time, item_id, qty, rate, amount):
+    sales = Sales(timestamp=time, item_id=item_id, qty=qty, rate=rate, amount=amount)
+   
+
+@api.route('/api/add_new_items', methods=['POST'])
+def create_items():
+    #data = request.form
+    #new_id = data['id'] auto increment
+    item_id = request.form.get("item_id")
+    qty = int(request.form.get("qty"))
+    rate = float(request.form.get("rate"))
+    amount = qty * rate 
+
+    company = company.query.first()
+
+    existing_item = Item.query.filter_by(item_id=item_id).first()
+
+    if existing_item:
+        return jsonify({"message": "Item already exists"}),400    
+    
+    item = Item(item_id=item_id,qty=qty,rate=rate,amount=amount)  
+
     
 
-
-
-#     @api.route('/home_full')
-# def home_full():
-#     # Fetch company info
-#     company = Company.query.first()
-    
-#     # Fetch all items
-#     items = Item.query.all()
-#     item_list = [{"id": i.item_id, "name": i.item_name} for i in items]
-    
-#     # Pass everything to the template
-#     return render_template(
-#         'home_full.html',
-#         name=company.name,
-#         balance=company.cash_balance,
-#         items=item_list
-#     )
+    db.session.add(item)
+    db.session.commit()
+    return jsonify({"message" : "item added successfully", "item_id":item.item_id})
+'''

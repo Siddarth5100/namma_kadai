@@ -1,32 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Namma kadai</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+</head>
 
-<center><header><h2>Company Name : {{name}}</h2></header></center>
-<hr>
+<body>
+    <center><header><h2>Company Name : {{name}}</h2></header></center>
+    <hr>
 
-<div>
-<p align="left"><h3>Cash Balance available: RS. {{balance}}</h3></p>
+    <div>
+        <p align="left"><h3>Cash Balance available: RS. {{balance}}</h3></p>
+    </div>
+
+    <h3>Items Available:</h3>
+
+    <div id ="table-buttons">
+        <div class="left">
+            <table border="1" cellpadding="5">
+    
+            <tr>
+                <th>Item id</th>
+                <th>Item name</th>
+            </tr>
+            {% if items %}
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.name }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="2" style="text-align: center;">No items available</td>
+                </tr>
+            {% endif %}
+                </table>
+            </div>
+
+        <div class="right">    
+            <div id="add-item">        
+            <h3>Add Items:</h3>
+            <label>Item name:</label>
+            <input type="text" id="add-item-inp" placeholder="Enter item name" required> <br><br>
+            <button id="add-item-btn">Add item</button>
+        </div>
+
+        
+    </div>
 </div>
+   <h3>Purchase Item:</h3>
+    
+    <form id="purchaseForm" method="POST">  
 
-<h4>Items Available:</h4>
+        <label for="purchase_item id">Item ID:</label>
+        <input type="number" id="purchase_item_id" name="item_id" placeholder="Enter item id" required><br><br>
+        
+        <label for="purchase_qty">Quantity:</label>
+        <input type="number" id="purchase_qty" name="qty" placeholder="Enter quantity"><br><br>
+
+        <label for="purchase_rate">Rate:</label>
+        <input type="number" id="purchase_rate" name="rate" placeholder="Enter rate"><br><br>
+
+        <label for="purchase_amount">Amount:</label>
+        <input id="purchase_amount" name="amount" readonly><br><br>
+
+        <button type="button">Add Purchase</button>
+        <button type="button">View Purchase</button>
+
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
 
 
-<table border="1" width="50%" align="left">
-   
-    <tr>
-        <th>Item_id</th>
-        <th>Item_name</th>
-    </tr>
-    {% for item in items %}
-    <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name }}</td>
-    </tr>
-    {% endfor %}
-</table>
+    <h3>Sales Item:</h3>
+
+    <form id="salesForm" method="POST">
+        
+        <label for="sale_item_id">Item ID:</label>
+        <input type="number" id="sales_item_id" name="item_id" placeholder="Enter item id" required><br><br>
+
+        <label for="sales_qty">Quantity:</label>
+        <input type="number" id="sales_qty" name="qty" placeholder="Enter quantity" required><br><br>
+
+        <label for="sales_rate">Rate:</label>
+        <input type="number" id="sales_rate" name="rate" placeholder="Enter rate" required><br><br>
+
+        <label for="sales_amount">Amount:</label>
+        <input id="sales_amount" name="amount" readonly><br><br>
+
+        <button type="button">Add Sales</button>
+        <button type="button">View sales</button>
+
+    </form>
+
+    <div id="message">
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+    </div>
+
+<!-- {% include 'purchase.html' %} -->
+<!-- {% include 'sales.html' %} -->
 
 
-<button> Add item </button>
-<button> Purchase item </button>
-<button> Sales item </button>
 
+
+
+    <script src="static/js/main.js"></script>
+
+</body>
+</html>
 
