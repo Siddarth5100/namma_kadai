@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    
     <center><header><h2>Company Name : {{name}}</h2></header></center>
     <hr>
 
@@ -49,10 +50,14 @@
             <button id="add-item-btn">Add item</button>
         </div>
 
+        <div id="msg"></div> 
+        <div id="err"></div>
+
         
     </div>
 </div>
-   <h3>Purchase Item:</h3>
+
+    <h3>Purchase Item:</h3>
     
     <form id="purchaseForm" method="POST">  
 
@@ -68,8 +73,8 @@
         <label for="purchase_amount">Amount:</label>
         <input id="purchase_amount" name="amount" readonly><br><br>
 
-        <button type="button">Add Purchase</button>
-        <button type="button">View Purchase</button>
+        <button id="add-purchase-btn" type="button">Add Purchase</button>
+        <button type="button" onclick="window.location.href='/purchase'">View Purchase</button>
 
     </form>
 
@@ -94,8 +99,8 @@
         <label for="sales_amount">Amount:</label>
         <input id="sales_amount" name="amount" readonly><br><br>
 
-        <button type="button">Add Sales</button>
-        <button type="button">View sales</button>
+        <button id="add-sales-btn" type="button">Add Sales</button>
+        <button id="view-sales-btn" type="button">View sales</button>
 
     </form>
 
@@ -104,13 +109,6 @@
             <p>{{ message }}</p>
         {% endif %}
     </div>
-
-<!-- {% include 'purchase.html' %} -->
-<!-- {% include 'sales.html' %} -->
-
-
-
-
 
     <script src="static/js/main.js"></script>
 

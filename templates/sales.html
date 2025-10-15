@@ -1,86 +1,47 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Page</title>
+    <title>Sales</title>
 </head>
 
 <body>
-
-    <h3>Sales Item:</h3>
-
-    <form id="salesForm" method="POST">
-        
-        <label for="item_id">Item ID:</label>
-        <input type="number" id="item_id" name="item_id" placeholder="Enter item id" required><br><br>
-
-        <label for="qty">Quantity:</label>
-        <input type="number" id="qty" name="qty" placeholder="Enter quantity" required><br><br>
-
-        <label for="rate">Rate:</label>
-        <input type="number" id="rate" name="rate" placeholder="Enter rate" required><br><br>
-
-        <label for="amount">Amount:</label>
-        <input id="amount" name="amount" readonly><br><br>
-
-        <button type="submit">Add Sales</button>
-        <button type="submit">View sales</button>
-
-    </form>
-
-    <div id="message">
-        {% if message %}
-            <p>{{ message }}</p>
+    <center><h3>Sales History</h3></center>
+    <table id="sales-table" border="1" cellpadding="5">
+        <tr>
+            <th>Sales Id</th>
+            <th>Timestamp</th>
+            <th>Item Id</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Amount</th>
+        </tr>
+        {% if sales %}
+            {% for sale in sales %}
+            <tr>
+                <td>{{ sale.sales_id }}</td>
+                <td>{{ sale.timestamp }}</td>
+                <td>{{ sale.item_id }}</td>
+                <td>{{ sale.qty }}</td>
+                <td>{{ sale.rate }}</td>
+                <td>{{ sale.amount }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>No sales records found</td>
+            </tr>
         {% endif %}
-    </div>
+    </table>
 
-    <!-- <button id="go-home-btn">Go to Home</button> -->
 
-<!-- </body>
-</html> --> -->
+
+    <button id="sales-home-btn">Go Back Home</button>
+
+<script src="static/js/sales.js"></script>
+
+</body>
+
+</html>

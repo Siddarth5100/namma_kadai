@@ -1,87 +1,49 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase page</title>
+    <title>Purchase</title>
 </head>
 
 <body>
+    <center><h3>Purchase History</h3></center>
 
-    <h3>Purchase Item:</h3>
+    <div id="purchase-table">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Purchase ID</th>
+                <th>Time</th>
+                <th>Item ID</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>Amount</th>
+            </tr>
+
+            {% if purchases %}
+                {% for purchase in purchases %}
+                <tr>
+                    <td>{{ purchase.purchase_id }}</td>
+                    <td>{{ purchase.timestamp }}</td>
+                    <td>{{ purchase.item_id }}</td>
+                    <td>{{ purchase.qty }}</td>
+                    <td>{{ purchase.rate }}</td>
+                    <td>{{ purchase.amount }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No purchase records found</td>
+                </tr>
+            {% endif %}
+
+        </table>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/purchase.js') }}"></script>
     
-    <form id="purchaseForm" method="POST">  
+    <button type="button" onclick=" window.location.href='home'">Go back Home</button>
 
-        <label for="item id">Item ID:</label>
-        <input type="number" id="item_id" name="item_id" placeholder="Enter item id" required><br><br>
-        
-        <label for="qty">Quantity:</label>
-        <input type="number" id="qty" name="qty" placeholder="Enter quantity"><br><br>
-
-        <label for="rate">Rate:</label>
-        <input type="number" id="rate" name="rate" placeholder="Enter rate" readonly><br><br>
-
-        <lable type="text">Amount:</lable>
-        <input><br><br>
-
-        <button type="submit">Add Purchase</button>
-        <button type="submit">View Purchase</button>
-
-    </form>
-
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-
-
-
-    <!-- <button id="go-home-btn">Go to Home</button> -->
-
-    <!-- <script src="static/js/purchase.js"></script>
-    
 </body>
-</html> --> -->
+</html>

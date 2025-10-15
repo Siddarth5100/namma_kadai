@@ -13,6 +13,7 @@ api = Blueprint('api', __name__)
 def home_page():
     row = Company.query.filter_by(company_name='Namma kadai').first()
     items = Item.query.all()
+    
     result = []
 
     for item in items:
@@ -21,14 +22,16 @@ def home_page():
         item_dict["name"] = item.item_name
         result.append(item_dict)
     
+        result.sort(key=lambda x: x["id"])
     return render_template('index.html', name=row.company_name, balance=row.cash_balance, items=result)
 
 
 @api.route('/api/add_items', methods=['POST'])    
 def add_items():
     data = request.get_json()
+    print(data)
     item = data.get("item_name")
-    #print(item)
+    print(item)
 
     #if not item:
     new_item = Item(item_name=item)
