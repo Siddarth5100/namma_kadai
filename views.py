@@ -106,8 +106,8 @@ def post_sales_items():
     data = request.get_json()
     time = datetime.now()
     item_id = data["item_id"]
-    qty = data["qty"]
-    rate = data["rate"]
+    qty = int(data["qty"])
+    rate = int(data["rate"])
     amount = qty * rate
 
     new_sales = Sales(timestamp=time, item_id=item_id, qty=qty, rate=rate, amount=amount)

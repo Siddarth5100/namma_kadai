@@ -61,7 +61,7 @@
     
     <form id="purchaseForm" method="POST">  
 
-        <label for="purchase_item id">Item ID:</label>
+        <label for="purchase_item_id">Item ID:</label>
         <input type="number" id="purchase_item_id" name="item_id" placeholder="Enter item id" required><br><br>
         
         <label for="purchase_qty">Quantity:</label>
@@ -87,7 +87,7 @@
 
     <form id="salesForm" method="POST">
         
-        <label for="sale_item_id">Item ID:</label>
+        <label for="sales_item_id">Item ID:</label>
         <input type="number" id="sales_item_id" name="item_id" placeholder="Enter item id" required><br><br>
 
         <label for="sales_qty">Quantity:</label>
@@ -98,6 +98,7 @@
 
         <label for="sales_amount">Amount:</label>
         <input id="sales_amount" name="amount" readonly><br><br>
+
 
         <button id="add-sales-btn" type="button">Add Sales</button>
         <button id="view-sales-btn" type="button">View sales</button>
@@ -111,6 +112,8 @@
     </div>
 
     <script src="static/js/main.js"></script>
+    <script src="static/js/purchase.js"></script>
+    <script src="static/js/sales.js"></script>
 
 </body>
 </html>

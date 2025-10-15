@@ -32,14 +32,6 @@ addItemBtn.addEventListener('click', function() {
     })
 });
 
-// navigation from /home page to view /sales page
-
-const viewSalesBtn = document.getElementById("view-sales-btn");
-
-viewSalesBtn.addEventListener("click", function() {
-    window.location.href = '/sales';
-})
-
 
 
 
