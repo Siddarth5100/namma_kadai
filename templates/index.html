@@ -21,26 +21,34 @@
 
     <div id ="table-buttons">
         <div class="left">
-            <table border="1" cellpadding="5">
-    
-            <tr>
-                <th>Item id</th>
-                <th>Item name</th>
-            </tr>
-            {% if items %}
-                {% for item in items %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td colspan="2" style="text-align: center;">No items available</td>
-                </tr>
-            {% endif %}
-                </table>
-            </div>
+            <table id="itemsTable" border="1" cellpadding="5">
+            
+                <thead>
+                    <tr>
+                        <th>Item id</th>
+                        <th>Item name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    {% if items %}
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.actions }}</td>    
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="2" style="text-align: center;">No items available</td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+
+            </table>
+        </div>
 
         <div class="right">    
             <div id="add-item">        

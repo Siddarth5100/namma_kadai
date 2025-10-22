@@ -15,7 +15,7 @@ class Purchase(db.Model):
     __tablename__ = "purchase"
     purchase_id = db.Column(db.Integer,primary_key = True,autoincrement = True)
     timestamp = db.Column(db.DateTime, nullable=False)
-    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id'), nullable=False, index=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id', ondelete='CASCADE'), nullable=False, index=True)
     qty = db.Column(db.Integer, nullable=False)
     rate = db.Column(db.Integer, nullable=False)
     amount = db.Column(db.Integer)
@@ -24,7 +24,7 @@ class Sales(db.Model):
     __tablename__ = "sales"
     sales_id = db.Column(db.Integer,primary_key = True,autoincrement = True)
     timestamp = db.Column(db.DateTime)
-    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id'), nullable=False, index=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('item.item_id', ondelete='CASCADE'), nullable=False, index=True)
     qty = db.Column(db.Integer, nullable=False)
     rate = db.Column(db.Integer, nullable=False)
     amount = db.Column(db.Integer)

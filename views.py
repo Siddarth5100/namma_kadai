@@ -125,8 +125,16 @@ def post_sales_items():
     })
 
 
+@api.route('/api/check_item/<int:item_id>', methods=['GET'])
+def check_item(item_id):
+    purchase_id = Purchase.query.filter_by(item_id=item_id).first()
 
+    sales_id = Sales.query.filter_by(item_id=item_id).first()
 
+    return jsonify({
+        "has_purchase": bool(purchase_id),
+        "has_purchase": bool(sales_id)
+    })
 
 
 
