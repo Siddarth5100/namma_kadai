@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,35 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
 </head>
 
+
+
 <body>
     
-    <center><header><h2>Company Name : {{name}}</h2></header></center>
+    <header><h1 id="company-name">Company Name : {{name}}</h1></header>
     <hr>
 
-    <div>
-        <p align="left"><h3>Cash Balance available: RS. {{balance}}</h3></p>
-    </div>
-
-    <h3>Items Available:</h3>
-
-    <div id ="table-buttons">
+    <div id="cash-balance">
+        <h2>Cash Balance available: RS. {{balance}}</h2>
+    </div>    
+    
+    <div id="main-container">
         <div class="left">
-            <table id="itemsTable" border="1" cellpadding="5">
+
+            <div id="add-item" class="card">        
+                <h3 style="color: #0f5f7d;">Add Items:</h3>
+                
+                <label>Item name:</label>
+                <input type="text" id="add-item-inp" placeholder="Enter item name" required> <br><br>
+                <button class="action-btn" id="add-item-btn">Add item</button>
+            </div>
+
+            <h3 style="color: #0f5f7d;">Items Available:</h3>
+
+            <table id="itemsTable" cellpadding="5">
             
                 <thead>
                     <tr>
-                        <th>Item id</th>
+                        <th style="width: 100px;">Item id</th>
                         <th>Item name</th>
                         <th>Actions</th>
                     </tr>
@@ -37,91 +49,83 @@
                     <tr>
                         <td>{{ item.id }}</td>
                         <td>{{ item.name }}</td>
-                        <td>{{ item.actions }}</td>    
+                        <td>
+                            {{ item.actions }}
+                            <button class="edit-btn" data-id="{{ item.id }}" data-name="{{ item.name }}">Edit</button>
+                        </td>    
                     </tr>
-                    {% endfor %}
-                    {% else %}
+                        {% endfor %}
+                        {% else %}
                     <tr>
-                        <td colspan="2" style="text-align: center;">No items available</td>
+                        <td colspan="3" style="text-align: center;">No items available</td>
                     </tr>
                     {% endif %}
                 </tbody>
-
             </table>
         </div>
+            
 
-        <div class="right">    
-            <div id="add-item">        
-            <h3>Add Items:</h3>
-            <label>Item name:</label>
-            <input type="text" id="add-item-inp" placeholder="Enter item name" required> <br><br>
-            <button id="add-item-btn">Add item</button>
-        </div>
 
-        <div id="msg"></div> 
-        <div id="err"></div>
+        <div class="right">  
+            <form id="purchaseForm" class="card" method="POST">
+                <h3 style="color: #0f5f7d;">Purchase Item:</h3>  
 
-        
+                <label for="purchase_item_id">Item ID:</label>
+                <input type="number" id="purchase_item_id" name="item_id" placeholder="Enter item id" required><br><br>
+                
+                <label for="purchase_qty">Quantity:</label>
+                <input type="number" id="purchase_qty" name="qty" placeholder="Enter quantity"><br><br>
+
+                <label for="purchase_rate">Rate:</label>
+                <input type="number" id="purchase_rate" name="rate" placeholder="Enter rate"><br><br>
+
+                <label for="purchase_amount">Amount:</label>
+                <input id="purchase_amount" name="amount" readonly value="Disabled Input" disabled><br><br>
+
+                <button class="action-btn" id="add-purchase-btn" type="button">Add Purchase</button>
+                <button class="action-btn" type="button" onclick="window.location.href='/purchase'">View Purchase</button>
+
+            </form>
+
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+
+            <form id="salesForm" class="card" method="POST">
+                <h3 style="color: #0f5f7d;">Sales Item:</h3>
+                
+                <label for="sales_item_id">Item ID:</label>
+                <input type="number" id="sales_item_id" name="item_id" placeholder="Enter item id" required><br><br>
+
+                <label for="sales_qty">Quantity:</label>
+                <input type="number" id="sales_qty" name="qty" placeholder="Enter quantity" required><br><br>
+
+                <label for="sales_rate">Rate:</label>
+                <input type="number" id="sales_rate" name="rate" placeholder="Enter rate" required><br><br>
+
+                <label for="sales_amount">Amount:</label>
+                <input id="sales_amount" name="amount" readonly value="Disabled input" disabled><br><br>
+
+
+                <button class="action-btn" id="add-sales-btn" type="button">Add Sales</button>
+                <button class="action-btn" id="view-sales-btn" type="button">View sales</button>
+
+            </form>
+
+        <div id="message">
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+        </div>    
     </div>
 </div>
 
-    <h3>Purchase Item:</h3>
-    
-    <form id="purchaseForm" method="POST">  
 
-        <label for="purchase_item_id">Item ID:</label>
-        <input type="number" id="purchase_item_id" name="item_id" placeholder="Enter item id" required><br><br>
-        
-        <label for="purchase_qty">Quantity:</label>
-        <input type="number" id="purchase_qty" name="qty" placeholder="Enter quantity"><br><br>
-
-        <label for="purchase_rate">Rate:</label>
-        <input type="number" id="purchase_rate" name="rate" placeholder="Enter rate"><br><br>
-
-        <label for="purchase_amount">Amount:</label>
-        <input id="purchase_amount" name="amount" readonly><br><br>
-
-        <button id="add-purchase-btn" type="button">Add Purchase</button>
-        <button type="button" onclick="window.location.href='/purchase'">View Purchase</button>
-
-    </form>
-
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
-
-
-    <h3>Sales Item:</h3>
-
-    <form id="salesForm" method="POST">
-        
-        <label for="sales_item_id">Item ID:</label>
-        <input type="number" id="sales_item_id" name="item_id" placeholder="Enter item id" required><br><br>
-
-        <label for="sales_qty">Quantity:</label>
-        <input type="number" id="sales_qty" name="qty" placeholder="Enter quantity" required><br><br>
-
-        <label for="sales_rate">Rate:</label>
-        <input type="number" id="sales_rate" name="rate" placeholder="Enter rate" required><br><br>
-
-        <label for="sales_amount">Amount:</label>
-        <input id="sales_amount" name="amount" readonly><br><br>
-
-
-        <button id="add-sales-btn" type="button">Add Sales</button>
-        <button id="view-sales-btn" type="button">View sales</button>
-
-    </form>
-
-    <div id="message">
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-    </div>
 
     <script src="static/js/main.js"></script>
     <script src="static/js/purchase.js"></script>
     <script src="static/js/sales.js"></script>
+
 
 </body>
 </html>

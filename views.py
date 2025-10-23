@@ -39,8 +39,12 @@ def add_items():
     db.session.add(new_item)
     db.session.commit()
 
-    return jsonify({"message":"Item added successfully",
-                    "item_id": new_item.item_id
+    return jsonify({
+        "message":"Item added successfully",
+        "item":{
+        "item_id": new_item.item_id,
+        "item_name": new_item.item_name
+        }
     })
 
 
@@ -138,64 +142,29 @@ def check_item(item_id):
 
 
 
+@api.route('/api/alter_name/<int:item_id>', methods=['POST'])
+def alter_name(item_id):
+    item = Item.query.filter_by(item_id=item_id).first()
+    print(item)
 
+    if not item: 
+        return jsonify({
+            "error": "item not found"
+        })
+    
+    data = request.get_json()
+    print(data)
+    new_name = data["item_name"]
+    print(new_name)
 
+    item.item_name = new_name
+    print(item.item_name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-########*********************want to check
-
-'''
-def purchase_items(time, item_id, qty, rate, amount):
-    purchase = Purchase(timestamp = time, item_id = item_id, qty = qty, rate = rate, amount = amount)
-
-    db.session.add(purchase)
     db.session.commit()
 
- def sales_items(time, item_id, qty, rate, amount):
-    sales = Sales(timestamp=time, item_id=item_id, qty=qty, rate=rate, amount=amount)
-   
 
-@api.route('/api/add_new_items', methods=['POST'])
-def create_items():
-    #data = request.form
-    #new_id = data['id'] auto increment
-    item_id = request.form.get("item_id")
-    qty = int(request.form.get("qty"))
-    rate = float(request.form.get("rate"))
-    amount = qty * rate 
 
-    company = company.query.first()
-
-    existing_item = Item.query.filter_by(item_id=item_id).first()
-
-    if existing_item:
-        return jsonify({"message": "Item already exists"}),400    
-    
-    item = Item(item_id=item_id,qty=qty,rate=rate,amount=amount)  
-
-    
-
-    db.session.add(item)
-    db.session.commit()
-    return jsonify({"message" : "item added successfully", "item_id":item.item_id})
-'''
+    return jsonify({
+        "message": "successfully updated",
+        "item_name": item.item_name
+   })

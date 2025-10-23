@@ -69,6 +69,7 @@ dataRows.forEach((row,index) => {
             
         .then(data => {
             console.log("Response data:", data);
+
             if (data.has_purchase) {
                 console.log("Item exists in purchase");
                 const userConfirmed = confirm("This item exist in purchase/sales. Delete it? ");
@@ -77,9 +78,9 @@ dataRows.forEach((row,index) => {
                     fetch(`/api/delete_items/${itemId}`, {
                         method: 'DELETE'
                     })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Deleted successfully", data);
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Deleted successfully", data);
                     })
                     .catch(error => console.error("Delete error:", error))
 
@@ -92,8 +93,8 @@ dataRows.forEach((row,index) => {
             } else {
                 console.log("Item not found in purchase")}
                 
-                fetch(`/api/delete_items/${itemId}`, {
-                    method: 'DELETE'})
+                    fetch(`/api/delete_items/${itemId}`, {
+                        method: 'DELETE'})
 
                     .then(response => response.json())
                     .then(data => {
@@ -105,11 +106,39 @@ dataRows.forEach((row,index) => {
         
         .catch(error => 
             console.error("Error:", error));       
-    })
+    });
 });
 
+console.log("---------done  edit-btn");
 
 
+// edit api
 
+document.querySelectorAll(".edit-btn").forEach(btn => {
+    // console.log("----button",btn);
+    btn.addEventListener("click", function() {
+        const itemId = btn.dataset.id;
+        console.log("*********** item id", itemId);
+        const currentName = btn.dataset.name;
+        console.log("------ currentName", currentName);
+        const newName = prompt("Edit item name:", currentName)
+        console.log(itemId, newName);   
+        
+        fetch(`/api/alter_name/${itemId}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({"item_name": newName})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("updated item:", data)
+            const row = btn.parentElement.parentElement;
+            const nameCell = row.cells[1];
+            nameCell.textContent = data.item_name;
+        })
+        .catch(error => 
+            console.error("error:", error)
+        );
+    });
+});
 
-console.log("---------done");
