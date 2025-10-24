@@ -3,10 +3,8 @@ from models import Company, Item, Purchase, Sales
 from datetime import datetime
 from flask import request, jsonify, render_template, Blueprint
 
-
 now = datetime.now()
 api = Blueprint('api', __name__)
-
 
 
 @api.route('/home', methods=['GET'])
@@ -29,11 +27,8 @@ def home_page():
 @api.route('/api/add_items', methods=['POST'])    
 def add_items():
     data = request.get_json()
-    print(data)
     item = data.get("item_name")
-    print(item)
 
-    #if not item:
     new_item = Item(item_name=item)
 
     db.session.add(new_item)
@@ -78,7 +73,7 @@ def post_purchase_items():
     company = Company.query.first()
 
     if company.cash_balance < amount:
-        #return render_template("purchase.html", message="Insufficient balance")
+        
         return jsonify({
             "message" : "Insufficient balance to make this purchase"
         }), 400
@@ -91,7 +86,6 @@ def post_purchase_items():
     
     db.session.commit()
 
-    #return render_template("purchase.html", message=f"Purchase successful, Amount: {amount}")
     return jsonify({
         "message" : "purchase added successfully",
         "amount": amount,
@@ -141,11 +135,9 @@ def check_item(item_id):
     })
 
 
-
-@api.route('/api/alter_name/<int:item_id>', methods=['POST'])
+@api.route('/api/alter_name/<int:item_id>', methods=['PATCH'])
 def alter_name(item_id):
     item = Item.query.filter_by(item_id=item_id).first()
-    print(item)
 
     if not item: 
         return jsonify({
@@ -153,16 +145,11 @@ def alter_name(item_id):
         })
     
     data = request.get_json()
-    print(data)
     new_name = data["item_name"]
-    print(new_name)
-
+ 
     item.item_name = new_name
-    print(item.item_name)
-
+  
     db.session.commit()
-
-
 
     return jsonify({
         "message": "successfully updated",

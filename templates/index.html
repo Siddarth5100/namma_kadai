@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Namma kadai</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
 </head>
-
-
 
 <body>
     
@@ -64,8 +61,6 @@
             </table>
         </div>
             
-
-
         <div class="right">  
             <form id="purchaseForm" class="card" method="POST">
                 <h3 style="color: #0f5f7d;">Purchase Item:</h3>  
@@ -106,7 +101,6 @@
                 <label for="sales_amount">Amount:</label>
                 <input id="sales_amount" name="amount" readonly value="Disabled input" disabled><br><br>
 
-
                 <button class="action-btn" id="add-sales-btn" type="button">Add Sales</button>
                 <button class="action-btn" id="view-sales-btn" type="button">View sales</button>
 
@@ -121,7 +115,6 @@
 </div>
 
 
-
     <script src="static/js/main.js"></script>
     <script src="static/js/purchase.js"></script>
     <script src="static/js/sales.js"></script>
@@ -129,4 +122,3 @@
 
 </body>
 </html>
-

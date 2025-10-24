@@ -1,5 +1,3 @@
-console.log("JS page loaded")
-
 //addItems
 
 const itemNameInp = document.getElementById('add-item-inp');
@@ -8,26 +6,26 @@ const addItemBtn = document.getElementById('add-item-btn');
 
 addItemBtn.addEventListener('click', function() {
     const newItemName = itemNameInp.value;
-    console.log(newItemName); 
 
     fetch('api/add_items', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({"item_name": newItemName}) // data to send server
     })
+
     .then(response => {
-        console.log("Raw response:", response);
         if (response.ok)
             return response.json()
         else {
             throw new Error("Update unsuccess")
         }
     })
+
     .then(data => {                                   //data contains key value
-        console.log("Parsed data:", data);
         const msgDiv = document.getElementById('msg');
         msgDiv.textContent = data.message;
     })
+
     .catch(error => {
         console.log("Error:", error);
         const msgDiv = document.getElementById('msg');
@@ -38,13 +36,9 @@ addItemBtn.addEventListener('click', function() {
 
 //dynamic alter delete buttons
 
-console.log("alter delete buttons");
-
 const rows = document.getElementById("itemsTable");
-console.log("Rows here", rows);
 
 const dataRows = rows.querySelectorAll('tbody tr');
-console.log("Data rows:", dataRows);
 
 dataRows.forEach((row,index) => {
     console.log("Row no:", index, "Item ID:", row.cells[0].textContent);
@@ -53,22 +47,18 @@ dataRows.forEach((row,index) => {
     delBtn.textContent = "Delete"
 
     row.cells[2].appendChild(delBtn);
-    console.log(delBtn);
      
     delBtn.addEventListener('click', () => {
         console.log("Delete clicked for Item Id:", row.cells[0].textContent);
            const itemId = row.cells[0].textContent;
-           console.log("----------Item Id:",itemId)
-
+           
         fetch(`/api/check_item/${itemId}`, {method: `GET`})
 
         .then(response => {
-            console.log(response)
             return response.json(); 
         })
             
         .then(data => {
-            console.log("Response data:", data);
 
             if (data.has_purchase) {
                 console.log("Item exists in purchase");
@@ -80,7 +70,6 @@ dataRows.forEach((row,index) => {
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log("Deleted successfully", data);
                     })
                     .catch(error => console.error("Delete error:", error))
 
@@ -98,7 +87,6 @@ dataRows.forEach((row,index) => {
 
                     .then(response => response.json())
                     .then(data => {
-                        console.log("Deleted", data);
                         row.remove();
                     })
                     .catch(error => console.error("Delete error:", error))
@@ -109,29 +97,21 @@ dataRows.forEach((row,index) => {
     });
 });
 
-console.log("---------done  edit-btn");
-
-
 // edit api
 
 document.querySelectorAll(".edit-btn").forEach(btn => {
-    // console.log("----button",btn);
     btn.addEventListener("click", function() {
         const itemId = btn.dataset.id;
-        console.log("*********** item id", itemId);
         const currentName = btn.dataset.name;
-        console.log("------ currentName", currentName);
         const newName = prompt("Edit item name:", currentName)
-        console.log(itemId, newName);   
         
         fetch(`/api/alter_name/${itemId}`, {
-            method: 'POST',
+            method: 'PATCH',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({"item_name": newName})
         })
         .then(response => response.json())
         .then(data => {
-            console.log("updated item:", data)
             const row = btn.parentElement.parentElement;
             const nameCell = row.cells[1];
             nameCell.textContent = data.item_name;
